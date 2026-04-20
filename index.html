@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aldo share add-on</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            background: #0d0d0d;
+            color: white;
+            font-family: Arial;
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            color: cyan;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: cyan;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: #1a1a1a;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px cyan;
+            width: 250px;
+        }
+
+        button {
+            background: cyan;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #00aaaa;
+        }
+
+        #searchInput {
+            width: 80%;
+            padding: 12px;
+            margin: 20px;
+            border-radius: 10px;
+            border: 2px solid cyan;
+            background: #1a1a1a;
+            color: white;
+            outline: none;
+        }
+
+        #searchInput:focus {
+            box-shadow: 0 0 10px cyan;
+        }
+
+        #searchInput::placeholder {
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🔥 Aldo add-on 🔥</h1>
+
+<button onclick="window.location.href='https://whatsapp.com/channel/0029Vb7cXotGufJ2B89eeL0i'">
+    📢 Join Saluran Aldo
+</button>
+
+<input type="text" id="searchInput" placeholder="Cari add-on / skin..." onkeyup="searchAddon()">
+
+<p>Download add-on & skin Minecraft ._.</p>
+
+<!-- 🧩 ADD-ON -->
+<h2>🧩 Add-on</h2>
+<div class="container">
+
+    <div class="card">
+        <h3>Actions & Stuff</h3>
+        <p>Animasi + texture</p>
+        <button onclick="downloadAddon('https://drive.google.com/file/d/1GR4LOqUBiCCCq0xzl5KIBBzuzdaOAqrl/view?usp=drivesdk')">
+            Download
+        </button>
+    </div>
+
+    <div class="card">
+        <h3>Night Vision</h3>
+        <p>Pencahayaan + texture</p>
+        <button onclick="downloadAddon('https://drive.google.com/file/d/1khcWWVCi-DkZEPXf4kR3uN6FxqCCsmSU/view?usp=drivesdk')">
+            Download
+        </button>
+    </div>
+
+    <div class="card">
+        <h3>Fight</h3>
+        <p>Animasi + senjata</p>
+        <button onclick="downloadAddon('https://www.mediafire.com/file/prfhv53u741p3vl/EPIC_FIGHT_ADDON.mcaddon/file')">
+            Download
+        </button>
+    </div>
+
+</div>
+
+<!-- 👕 SKIN -->
+<h2>👕 Skin</h2>
+<div class="container">
+
+    <div class="card">
+        <h3>Red skin</h3>
+        </p>skin </p>
+        <button onclick="downloadAddon('https://drive.google.com/file/d/1pGVgfRNTJ8qWnaT9woWP-RcgtU1jSKWC/view?usp=drivesdk')">
+            Download
+        </button>
+    </div>
+    <div class="card">
+        <h3>template skin</h3>
+        </p>celana</p>
+        <button onclick="downloadAddon('https://drive.google.com/file/d/1HU4qtc1uB173oQ6GipNyVFGPRcsXlmcb/view?usp=drivesdk')">
+            Download
+        </button>
+    </div>
+
+</div>
+
+<script>
+function downloadAddon(link) {
+    alert("Download dimulai!");
+    window.location.href = link;
+}
+
+function searchAddon() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.getElementsByClassName("card");
+
+    for (let i = 0; i < cards.length; i++) {
+        let text = cards[i].innerText.toLowerCase();
+
+        if (text.includes(input)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script> <script>
+function searchAddon() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.getElementsByClassName("card");
+
+    for (let i = 0; i < cards.length; i++) {
+        let text = cards[i].innerText.toLowerCase();
+
+        if (text.includes(input)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script><script>
+function searchAddon() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.getElementsByClassName("card");
+
+    for (let i = 0; i < cards.length; i++) {
+        let text = cards[i].innerText.toLowerCase();
+
+        if (text.includes(input)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html>
