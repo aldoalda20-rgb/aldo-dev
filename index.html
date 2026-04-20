@@ -93,6 +93,11 @@
         <button onclick="downloadAddon('https://drive.google.com/file/d/1GR4LOqUBiCCCq0xzl5KIBBzuzdaOAqrl/view?usp=drivesdk')">
             Download
         </button>
+        
+        <button class="like-btn" onclick="like(this)">
+    🤍 <span>0</span>
+</button>
+        
     </div>
 
     <div class="card">
@@ -101,6 +106,11 @@
         <button onclick="downloadAddon('https://drive.google.com/file/d/1khcWWVCi-DkZEPXf4kR3uN6FxqCCsmSU/view?usp=drivesdk')">
             Download
         </button>
+        
+       <button class="like-btn" onclick="like(this)">
+    🤍 <span>0</span>
+</button> 
+        
     </div>
 
     <div class="card">
@@ -109,6 +119,11 @@
         <button onclick="downloadAddon('https://www.mediafire.com/file/prfhv53u741p3vl/EPIC_FIGHT_ADDON.mcaddon/file')">
             Download
         </button>
+        
+        <button class="like-btn" onclick="like(this)">
+    🤍 <span>0</span>
+</button>
+        
     </div>
 
 </div>
@@ -123,6 +138,11 @@
         <button onclick="downloadAddon('https://drive.google.com/file/d/1pGVgfRNTJ8qWnaT9woWP-RcgtU1jSKWC/view?usp=drivesdk')">
             Download
         </button>
+        
+        <button class="like-btn" onclick="like(this)">
+    🤍 <span>0</span>
+</button>
+        
     </div>
     <div class="card">
         <h3>template skin</h3>
@@ -130,6 +150,11 @@
         <button onclick="downloadAddon('https://drive.google.com/file/d/1HU4qtc1uB173oQ6GipNyVFGPRcsXlmcb/view?usp=drivesdk')">
             Download
         </button>
+        
+        <button class="like-btn" onclick="like(this)">
+    🤍 <span>0</span>
+</button>
+        
     </div>
 
 </div>
@@ -182,6 +207,21 @@ function searchAddon() {
         } else {
             cards[i].style.display = "none";
         }
+    }
+}
+</script><script>
+function like(btn) {
+    let count = btn.querySelector("span");
+    let num = parseInt(count.innerText);
+
+    if (btn.classList.contains("liked")) {
+        // kalau sudah like → batalin
+        btn.classList.remove("liked");
+        btn.innerHTML = "🤍 <span>" + (num - 1) + "</span>";
+    } else {
+        // kalau belum like
+        btn.classList.add("liked");
+        btn.innerHTML = "❤️ <span>" + (num + 1) + "</span>";
     }
 }
 </script>
