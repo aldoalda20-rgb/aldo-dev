@@ -1,238 +1,227 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Aldo share add-on</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+const express = require('express');
+const multer = require('multer');
+const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
-    <style>
-        body {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url("https://drive.google.com/uc?export=view&id=1IfiDvIrpGyT-Fbkks32sf3qL8VzaWure");
+const app = express();
+const PORT = 3000;
 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+app.use(cors());
+app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-    color: white;
-    font-family: Arial;
-    text-align: center;
-    margin: 0;
-        }
+let posts = [];
 
-        h1 {
-            color: cyan;
-            padding: 20px;
-        }
-
-        h2 {
-            margin-top: 30px;
-            color: cyan;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .card {
-            background: #1a1a1a;
-            margin: 15px;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px cyan;
-            width: 250px;
-        }
-
-        button {
-            background: cyan;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #00aaaa;
-        }
-
-        #searchInput {
-            width: 80%;
-            padding: 12px;
-            margin: 20px;
-            border-radius: 10px;
-            border: 2px solid cyan;
-            background: #1a1a1a;
-            color: white;
-            outline: none;
-        }
-
-        #searchInput:focus {
-            box-shadow: 0 0 10px cyan;
-        }
-
-        #searchInput::placeholder {
-            color: #888;
-        }
-    </style>
-</head>
-
-<body>
-
-<h1>🔥 Aldo add-on 🔥</h1>
-
-<button onclick="window.location.href='https://whatsapp.com/channel/0029Vb7cXotGufJ2B89eeL0i'">
-    📢 Join Saluran Aldo
-</button>
-
-<input type="text" id="searchInput" placeholder="Cari add-on / skin..." onkeyup="searchAddon()">
-
-<p>Download add-on & skin Minecraft ._.</p>
-
-<!-- 🧩 ADD-ON -->
-<h2>🧩 Add-on</h2>
-<div class="container">
-
-    <div class="card">
-        <h3>Actions & Stuff</h3>
-        <p>Animasi + texture</p>
-        <button onclick="downloadAddon('https://drive.google.com/file/d/1GR4LOqUBiCCCq0xzl5KIBBzuzdaOAqrl/view?usp=drivesdk')">
-            Download
-        </button>
-        
-        <button class="like-btn" onclick="like(this)">
-    🤍 <span>0</span>
-</button>
-        
-    </div>
-
-    <div class="card">
-        <h3>Night Vision</h3>
-        <p>Pencahayaan + texture</p>
-        <button onclick="downloadAddon('https://drive.google.com/file/d/1khcWWVCi-DkZEPXf4kR3uN6FxqCCsmSU/view?usp=drivesdk')">
-            Download
-        </button>
-        
-       <button class="like-btn" onclick="like(this)">
-    🤍 <span>0</span>
-</button> 
-        
-    </div>
-
-    <div class="card">
-        <h3>Fight</h3>
-        <p>Animasi + senjata</p>
-        <button onclick="downloadAddon('https://www.mediafire.com/file/prfhv53u741p3vl/EPIC_FIGHT_ADDON.mcaddon/file')">
-            Download
-        </button>
-        
-        <button class="like-btn" onclick="like(this)">
-    🤍 <span>0</span>
-</button>
-        
-    </div>
-
-</div>
-
-<!-- 👕 SKIN -->
-<h2>👕 Skin</h2>
-<div class="container">
-
-    <div class="card">
-        <h3>Red skin</h3>
-        </p>skin </p>
-        <button onclick="downloadAddon('https://drive.google.com/file/d/1pGVgfRNTJ8qWnaT9woWP-RcgtU1jSKWC/view?usp=drivesdk')">
-            Download
-        </button>
-        
-        <button class="like-btn" onclick="like(this)">
-    🤍 <span>0</span>
-</button>
-        
-    </div>
-    <div class="card">
-        <h3>template skin</h3>
-        </p>celana</p>
-        <button onclick="downloadAddon('https://drive.google.com/file/d/1HU4qtc1uB173oQ6GipNyVFGPRcsXlmcb/view?usp=drivesdk')">
-            Download
-        </button>
-        
-        <button class="like-btn" onclick="like(this)">
-    🤍 <span>0</span>
-</button>
-        
-    </div>
-
-</div>
-    </h1>kuli kuli apa yang menyakitkan
-    kulihat kau ber4k bersama nya ._.</h1>
-
-<script>
-function downloadAddon(link) {
-    alert("Download dimulai!");
-    window.location.href = link;
-}
-
-function searchAddon() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let cards = document.getElementsByClassName("card");
-
-    for (let i = 0; i < cards.length; i++) {
-        let text = cards[i].innerText.toLowerCase();
-
-        if (text.includes(input)) {
-            cards[i].style.display = "block";
-        } else {
-            cards[i].style.display = "none";
-        }
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + path.extname(file.originalname));
     }
+});
+const upload = multer({ storage: storage });
+
+if (!fs.existsSync('./uploads')){
+    fs.mkdirSync('./uploads');
 }
-</script> <script>
-function searchAddon() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let cards = document.getElementsByClassName("card");
 
-    for (let i = 0; i < cards.length; i++) {
-        let text = cards[i].innerText.toLowerCase();
+app.get('/', (req, res) => {
+    res.send(`
+    <!DOCTYPE html>
+    <html lang="id">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web Galeri & Komentar</title>
+        <style>
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f0f2f5;
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .container { width: 100%; max-width: 600px; }
+            .upload-section, .post-card {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            h2 { margin-top: 0; color: #333; }
+            input[type="file"], textarea {
+                width: 100%;
+                margin-bottom: 10px;
+                padding: 8px;
+                box-sizing: border-box;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            textarea { resize: vertical; height: 80px; }
+            button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+            button:hover { background-color: #0056b3; }
+            .post-card img { width: 100%; border-radius: 6px; margin-bottom: 10px; }
+            .post-desc { font-size: 16px; margin-bottom: 15px; color: #444; }
+            .comment-section { border-top: 1px solid #eee; padding-top: 10px; }
+            .comment-list { list-style: none; padding: 0; margin-bottom: 10px; }
+            .comment-list li {
+                background: #f8f9fa;
+                padding: 8px;
+                border-radius: 4px;
+                margin-bottom: 5px;
+                font-size: 14px;
+            }
+            .comment-input-group { display: flex; gap: 5px; }
+            .comment-input-group input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        </style>
+    </head>
+    <body>
 
-        if (text.includes(input)) {
-            cards[i].style.display = "block";
-        } else {
-            cards[i].style.display = "none";
+    <div class="container">
+        <div class="upload-section">
+            <h2>Buat Postingan Baru</h2>
+            <form id="uploadForm">
+                <input type="file" id="imageInput" accept="image/*" required>
+                <textarea id="descInput" placeholder="Tulis deskripsi gambar di sini..." required></textarea>
+                <button type="submit">Bagikan</button>
+            </form>
+        </div>
+        <div id="feed"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        document.addEventListener('DOMContentLoaded', fetchPosts);
+
+        async function fetchPosts() {
+            const response = await fetch(\`\${API_URL}/posts\`);
+            const posts = await response.json();
+            const feed = document.getElementById('feed');
+            feed.innerHTML = '';
+
+            posts.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                
+                const commentsHtml = post.comments.map(c => \`<li>\${c}</li>\`).join('');
+
+                postCard.innerHTML = \`
+                    <img src="\${post.imageUrl}" alt="Post Image">
+                    <p class="post-desc">\${post.description}</p>
+                    <div class="comment-section">
+                        <ul class="comment-list" id="comments-\${post.id}">
+                            \${commentsHtml}
+                        </ul>
+                        <div class="comment-input-group">
+                            <input type="text" id="input-\${post.id}" placeholder="Tulis komentar...">
+                            <button onclick="addComment(\${post.id})">Kirim</button>
+                        </div>
+                    </div>
+                \`;
+                feed.appendChild(postCard);
+            });
         }
-    }
-}
-</script><script>
-function searchAddon() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let cards = document.getElementsByClassName("card");
 
-    for (let i = 0; i < cards.length; i++) {
-        let text = cards[i].innerText.toLowerCase();
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const imageFile = document.getElementById('imageInput').files[0];
+            const description = document.getElementById('descInput').value;
 
-        if (text.includes(input)) {
-            cards[i].style.display = "block";
-        } else {
-            cards[i].style.display = "none";
+            const formData = new FormData();
+            formData.append('image', imageFile);
+            formData.append('description', description);
+
+            const response = await fetch(\`\${API_URL}/posts\`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                document.getElementById('uploadForm').reset();
+                fetchPosts();
+            } else {
+                alert('Gagal mengupload postingan');
+            }
+        });
+
+        async function addComment(postId) {
+            const inputElement = document.getElementById(\`input-\${postId}\`);
+            const commentText = inputElement.value;
+
+            if (!commentText.trim()) return;
+
+            const response = await fetch(\`\${API_URL}/posts/\${postId}/comments\`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ comment: commentText })
+            });
+
+            if (response.ok) {
+                inputElement.value = '';
+                fetchPosts();
+            } else {
+                alert('Gagal mengirim komentar');
+            }
         }
-    }
-}
-</script><script>
-function like(btn) {
-    let count = btn.querySelector("span");
-    let num = parseInt(count.innerText);
+    </script>
 
-    if (btn.classList.contains("liked")) {
-        // kalau sudah like → batalin
-        btn.classList.remove("liked");
-        btn.innerHTML = "🤍 <span>" + (num - 1) + "</span>";
+    </body>
+    </html>
+    `);
+});
+
+app.get('/api/posts', (req, res) => {
+    res.json(posts);
+});
+
+app.post('/api/posts', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('Gambar wajib diupload.');
+    }
+
+    const newPost = {
+        id: Date.now(),
+        imageUrl: `http://localhost:${PORT}/uploads/${req.file.filename}`,
+        description: req.body.description || '',
+        comments: []
+    };
+
+    posts.unshift(newPost);
+    res.status(201).json(newPost);
+});
+
+app.post('/api/posts/:id/comments', (req, res) => {
+    const postId = parseInt(req.params.id);
+    const { comment } = req.body;
+
+    const post = posts.find(p => p.id === postId);
+    if (!post) {
+        return res.status(404).send('Postingan tidak ditemukan.');
+    }
+
+    if (comment) {
+        post.comments.push(comment);
+        res.status(201).json(post);
     } else {
-        // kalau belum like
-        btn.classList.add("liked");
-        btn.innerHTML = "❤️ <span>" + (num + 1) + "</span>";
+        res.status(400).send('Komentar tidak boleh kosong.');
     }
-}
-</script>
+});
 
-</body>
-</html>
+app.listen(PORT, () => {
+    console.log(`Server aktif di http://localhost:${PORT}`);
+});
